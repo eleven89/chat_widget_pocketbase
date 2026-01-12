@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Widget Example</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      line-height: 1.6;
+      color: #333;
+    }
+    h1 { color: #007bff; }
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    pre {
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+    }
+    .example-section {
+      margin: 40px 0;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+    h2 { margin-top: 0; }
+    h3 { margin-top: 24px; margin-bottom: 12px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #eee;
+    }
+    .spacer {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-size: 18px;
+    }
+    .theme-preview {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .theme-card {
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      flex: 1;
+      min-width: 200px;
+    }
+    .theme-card h4 {
+      margin: 0 0 8px 0;
+    }
+    .theme-card code {
+      font-size: 12px;
+      display: block;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chat Widget Demo</h1>
+  <p>This page demonstrates the drop-in chat widget. Look for the chat bubble in the bottom-right corner. It will auto-open after 3 seconds with a purple theme and pulse animation!</p>
+
+  <div class="example-section">
+    <h2>Basic Usage</h2>
+    <p>Add this single line before <code>&lt;/body&gt;</code> on any HTML page:</p>
+    <pre><code>&lt;script src="chat-widget.js"&gt;&lt;/script&gt;</code></pre>
+  </div>
+
+  <div class="example-section">
+    <h2>Theme Examples</h2>
+    <div class="theme-preview">
+      <div class="theme-card" style="background: #f0f9ff;">
+        <h4>Default Blue</h4>
+        <code>data-color="#007bff"</code>
+      </div>
+      <div class="theme-card" style="background: #faf5ff;">
+        <h4>Purple</h4>
+        <code>data-color="#7c3aed"</code>
+      </div>
+      <div class="theme-card" style="background: #f0fdf4;">
+        <h4>Green</h4>
+        <code>data-color="#16a34a"</code>
+      </div>
+      <div class="theme-card" style="background: #1a1a1a; color: white;">
+        <h4>Dark Mode</h4>
+        <code>data-color="#3b82f6"
+data-color-bg="#1a1a1a"
+data-color-assistant="#2a2a2a"
+data-color-assistant-text="#ffffff"</code>
+      </div>
+    </div>
+  </div>
+
+  <div class="example-section">
+    <h2>Dark Mode Example</h2>
+    <pre><code>&lt;script
+  src="chat-widget.js"
+  data-color="#3b82f6"
+  data-color-text="#ffffff"
+  data-color-bg="#1a1a1a"
+  data-color-assistant="#2a2a2a"
+  data-color-assistant-text="#e5e5e5"
+  data-shadow="large"
+&gt;&lt;/script&gt;</code></pre>
+  </div>
+
+  <div class="example-section">
+    <h2>All Configuration Options</h2>
+
+    <h3>Basic Options</h3>
+    <table>
+      <tr><th>Attribute</th><th>Default</th><th>Description</th></tr>
+      <tr>
+        <td><code>data-pb</code></td>
+        <td>https://pocketbase.eleven89.org</td>
+        <td>PocketBase server URL</td>
+      </tr>
+      <tr>
+        <td><code>data-header</code></td>
+        <td>Chat with us</td>
+        <td>Header text displayed at top of chat panel</td>
+      </tr>
+      <tr>
+        <td><code>data-placeholder</code></td>
+        <td>Type a message...</td>
+        <td>Input field placeholder text</td>
+      </tr>
+      <tr>
+        <td><code>data-position</code></td>
+        <td>right</td>
+        <td>Widget position: <code>left</code> or <code>right</code></td>
+      </tr>
+      <tr>
+        <td><code>data-greeting</code></td>
+        <td>(none)</td>
+        <td>Greeting message shown when user opens chat manually</td>
+      </tr>
+    </table>
+
+    <h3>Appearance Options</h3>
+    <table>
+      <tr><th>Attribute</th><th>Default</th><th>Description</th></tr>
+      <tr>
+        <td><code>data-color</code></td>
+        <td>#007bff</td>
+        <td>Primary color for button, header, and user messages</td>
+      </tr>
+      <tr>
+        <td><code>data-color-text</code></td>
+        <td>#ffffff</td>
+        <td>Text color on primary backgrounds (button, header, user messages)</td>
+      </tr>
+      <tr>
+        <td><code>data-color-bg</code></td>
+        <td>#ffffff</td>
+        <td>Panel and message area background color</td>
+      </tr>
+      <tr>
+        <td><code>data-color-assistant</code></td>
+        <td>#ffffff</td>
+        <td>Assistant message bubble background color</td>
+      </tr>
+      <tr>
+        <td><code>data-color-assistant-text</code></td>
+        <td>#333333</td>
+        <td>Assistant message text color</td>
+      </tr>
+      <tr>
+        <td><code>data-button-size</code></td>
+        <td>60</td>
+        <td>Toggle button size in pixels</td>
+      </tr>
+      <tr>
+        <td><code>data-panel-width</code></td>
+        <td>350</td>
+        <td>Chat panel width in pixels</td>
+      </tr>
+      <tr>
+        <td><code>data-border-radius</code></td>
+        <td>16</td>
+        <td>Border radius for panel in pixels</td>
+      </tr>
+      <tr>
+        <td><code>data-offset-x</code></td>
+        <td>20</td>
+        <td>Horizontal offset from edge in pixels</td>
+      </tr>
+      <tr>
+        <td><code>data-offset-y</code></td>
+        <td>20</td>
+        <td>Vertical offset from bottom in pixels</td>
+      </tr>
+      <tr>
+        <td><code>data-font-family</code></td>
+        <td>System fonts</td>
+        <td>Custom font family CSS value</td>
+      </tr>
+      <tr>
+        <td><code>data-shadow</code></td>
+        <td>medium</td>
+        <td>Shadow style: <code>none</code>, <code>small</code>, <code>medium</code>, <code>large</code></td>
+      </tr>
+      <tr>
+        <td><code>data-z-index</code></td>
+        <td>99999</td>
+        <td>Z-index for the widget</td>
+      </tr>
+    </table>
+
+    <h3>Auto-Open Options</h3>
+    <table>
+      <tr><th>Attribute</th><th>Default</th><th>Description</th></tr>
+      <tr>
+        <td><code>data-auto-open</code></td>
+        <td>false</td>
+        <td>Automatically open chat after delay</td>
+      </tr>
+      <tr>
+        <td><code>data-auto-open-delay</code></td>
+        <td>5</td>
+        <td>Seconds to wait before auto-opening</td>
+      </tr>
+      <tr>
+        <td><code>data-auto-open-once</code></td>
+        <td>true</td>
+        <td>Only auto-open once per browser session (prevents annoyance)</td>
+      </tr>
+      <tr>
+        <td><code>data-auto-open-message</code></td>
+        <td>(uses greeting)</td>
+        <td>Message shown when chat auto-opens</td>
+      </tr>
+      <tr>
+        <td><code>data-start-open</code></td>
+        <td>false</td>
+        <td>Start with chat panel already open on page load</td>
+      </tr>
+      <tr>
+        <td><code>data-cooldown</code></td>
+        <td>0</td>
+        <td>Hours to wait before auto-opening again after user dismisses (0 = no cooldown)</td>
+      </tr>
+    </table>
+
+    <h3>Trigger Options</h3>
+    <table>
+      <tr><th>Attribute</th><th>Default</th><th>Description</th></tr>
+      <tr>
+        <td><code>data-open-on-scroll</code></td>
+        <td>0</td>
+        <td>Open chat when user scrolls X% down the page (e.g., <code>50</code> for 50%)</td>
+      </tr>
+      <tr>
+        <td><code>data-open-on-exit</code></td>
+        <td>false</td>
+        <td>Open chat on exit intent (mouse leaves viewport at top). Desktop only.</td>
+      </tr>
+    </table>
+
+    <h3>Display Options</h3>
+    <table>
+      <tr><th>Attribute</th><th>Default</th><th>Description</th></tr>
+      <tr>
+        <td><code>data-pulse</code></td>
+        <td>false</td>
+        <td>Show pulse animation on toggle button to draw attention</td>
+      </tr>
+      <tr>
+        <td><code>data-mobile</code></td>
+        <td>true</td>
+        <td>Show widget on mobile devices (set to <code>false</code> to hide on mobile)</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="example-section">
+    <h2>Full Example</h2>
+    <pre><code>&lt;script
+  src="chat-widget.js"
+  data-pb="https://pocketbase.eleven89.org"
+  data-header="Need Help?"
+  data-placeholder="Ask us anything..."
+  data-position="right"
+  data-greeting="Hi! How can we help you today?"
+
+  data-color="#7c3aed"
+  data-color-text="#ffffff"
+  data-color-bg="#ffffff"
+  data-color-assistant="#f3f4f6"
+  data-color-assistant-text="#1f2937"
+  data-button-size="60"
+  data-panel-width="380"
+  data-border-radius="20"
+  data-offset-x="24"
+  data-offset-y="24"
+  data-shadow="large"
+
+  data-auto-open="true"
+  data-auto-open-delay="10"
+  data-auto-open-once="true"
+  data-auto-open-message="Have questions? We're here to help!"
+  data-cooldown="24"
+  data-pulse="true"
+  data-mobile="true"
+&gt;&lt;/script&gt;</code></pre>
+  </div>
+
+  <div class="example-section">
+    <h2>How It Works</h2>
+    <ol>
+      <li>Widget loads and checks for existing session in sessionStorage</li>
+      <li>If auto-open is enabled, waits for delay then opens (respecting cooldown/once settings)</li>
+      <li>On first message, creates a session in PocketBase</li>
+      <li>All messages are POSTed to PocketBase with the session ID</li>
+      <li>When user closes chat after auto-open, cooldown timer starts (if configured)</li>
+      <li>View all conversations in the PocketBase admin panel</li>
+    </ol>
+  </div>
+
+  <div class="example-section">
+    <h2>Storage Keys</h2>
+    <table>
+      <tr><th>Key</th><th>Storage</th><th>Purpose</th></tr>
+      <tr>
+        <td><code>atw_chat_session_id</code></td>
+        <td>sessionStorage</td>
+        <td>Current chat session ID (cleared when browser closes)</td>
+      </tr>
+      <tr>
+        <td><code>atw_chat_auto_opened</code></td>
+        <td>sessionStorage</td>
+        <td>Tracks if auto-open has fired this session</td>
+      </tr>
+      <tr>
+        <td><code>atw_chat_dismissed</code></td>
+        <td>localStorage</td>
+        <td>Timestamp of last dismissal (for cooldown feature)</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Spacer to test scroll trigger -->
+  <div class="spacer">
+    Scroll down to see the scroll trigger in action (if enabled)
+  </div>
+
+  <p style="margin-top: 40px; color: #666; text-align: center;">
+    Try it out! The chat will auto-open after 3 seconds with a purple theme.
+  </p>
+
+  <!-- Chat Widget with custom appearance -->
+  <script
+    src="chat-widget.js"
+    data-color="#7c3aed"
+    data-color-assistant="#f3e8ff"
+    data-color-assistant-text="#581c87"
+    data-border-radius="20"
+    data-shadow="large"
+    data-auto-open="true"
+    data-auto-open-delay="3"
+    data-auto-open-message="Hi! This demo shows a purple theme with custom styling. How can we help?"
+    data-pulse="true"
+  ></script>
+</body>
+</html>
