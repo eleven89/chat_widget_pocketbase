@@ -43,6 +43,9 @@
  * Display options:
  *   data-pulse           - Show pulse animation on toggle button (default: false)
  *   data-mobile          - Show on mobile devices (default: true)
+ *
+ * Analytics options:
+ *   data-plausible-goal  - Plausible goal name to fire when chat is opened (e.g., "Chat Opened")
  */
 (function() {
   'use strict';
@@ -107,7 +110,10 @@
 
     // Display options
     pulse: parseBool(script.dataset.pulse, false),
-    mobile: parseBool(script.dataset.mobile, true)
+    mobile: parseBool(script.dataset.mobile, true),
+
+    // Analytics options
+    plausibleGoal: script.dataset.plausibleGoal || ''
   };
 
   const WIDGET_ID = 'atw-chat-widget';
@@ -121,6 +127,7 @@
   let hasAutoOpened = false;
   let hasTriggeredScroll = false;
   let hasTriggeredExit = false;
+  let hasTrackedGoal = false;
   const messages = [];
 
   // Check if mobile device
@@ -166,6 +173,16 @@
     try {
       sessionStorage.setItem(AUTO_OPENED_KEY, 'true');
     } catch (e) {}
+  }
+
+  // Track Plausible goal (fires once per page load)
+  function trackPlausibleGoal() {
+    if (hasTrackedGoal || !config.plausibleGoal) return;
+    hasTrackedGoal = true;
+
+    if (typeof plausible === 'function') {
+      plausible(config.plausibleGoal);
+    }
   }
 
   // Inject styles
@@ -476,6 +493,9 @@
 
     isOpen = true;
     panel.classList.add('open');
+
+    // Track Plausible goal
+    trackPlausibleGoal();
 
     // Remove pulse when opened
     if (toggle) toggle.classList.remove('pulse');
