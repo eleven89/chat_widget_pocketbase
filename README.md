@@ -83,6 +83,25 @@ Customize the widget using data attributes:
 | `data-pulse` | `false` | Show pulse animation on toggle button |
 | `data-mobile` | `true` | Show widget on mobile devices |
 
+### Plausible Analytics Options
+
+Track chat widget interactions with [Plausible Analytics](https://plausible.io/). These attributes fire custom events when users interact with the widget.
+
+| Attribute | Description |
+|-----------|-------------|
+| `data-plausible-open` | Goal fired when chat panel opens (auto or manual) |
+| `data-plausible-click` | Goal fired when user clicks the chat button |
+| `data-plausible-focus` | Goal fired when user focuses the input field |
+| `data-plausible-send` | Goal fired when user sends a message |
+
+**Recommended goal names:**
+- `Chat Opened`
+- `Chat Clicked`
+- `Chat Focused`
+- `Chat Message Sent`
+
+**Setup:** Create matching goals in your Plausible dashboard under Settings → Goals → Add Goal → Custom Event.
+
 ## Examples
 
 ### Minimal (just the widget)
@@ -121,6 +140,21 @@ Customize the widget using data attributes:
   data-auto-open-delay="5"
   data-auto-open-message="Need help? We're here!"
   data-pulse="true"
+></script>
+```
+
+### With Plausible Analytics tracking
+```html
+<script
+  src="chat-widget.js"
+  data-auto-open="true"
+  data-auto-open-delay="5"
+  data-auto-open-message="Need help? We're here!"
+  data-pulse="true"
+  data-plausible-open="Chat Opened"
+  data-plausible-click="Chat Clicked"
+  data-plausible-focus="Chat Focused"
+  data-plausible-send="Chat Message Sent"
 ></script>
 ```
 
@@ -172,6 +206,11 @@ Customize the widget using data attributes:
   data-cooldown="24"
   data-pulse="true"
   data-mobile="true"
+
+  data-plausible-open="Chat Opened"
+  data-plausible-click="Chat Clicked"
+  data-plausible-focus="Chat Focused"
+  data-plausible-send="Chat Message Sent"
 ></script>
 ```
 
