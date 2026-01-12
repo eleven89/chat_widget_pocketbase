@@ -44,8 +44,11 @@
  *   data-pulse           - Show pulse animation on toggle button (default: false)
  *   data-mobile          - Show on mobile devices (default: true)
  *
- * Analytics options:
- *   data-plausible-goal  - Plausible goal name to fire when chat is opened (e.g., "Chat Opened")
+ * Analytics options (Plausible):
+ *   data-plausible-open   - Goal fired when chat panel opens (auto or manual)
+ *   data-plausible-click  - Goal fired when user clicks the chat button
+ *   data-plausible-focus  - Goal fired when user focuses the input field
+ *   data-plausible-send   - Goal fired when user sends a message
  */
 (function() {
   'use strict';
@@ -112,8 +115,11 @@
     pulse: parseBool(script.dataset.pulse, false),
     mobile: parseBool(script.dataset.mobile, true),
 
-    // Analytics options
-    plausibleGoal: script.dataset.plausibleGoal || ''
+    // Analytics options (Plausible)
+    plausibleOpen: script.dataset.plausibleOpen || '',
+    plausibleClick: script.dataset.plausibleClick || '',
+    plausibleFocus: script.dataset.plausibleFocus || '',
+    plausibleSend: script.dataset.plausibleSend || ''
   };
 
   const WIDGET_ID = 'atw-chat-widget';
@@ -127,7 +133,7 @@
   let hasAutoOpened = false;
   let hasTriggeredScroll = false;
   let hasTriggeredExit = false;
-  let hasTrackedGoal = false;
+  const trackedGoals = {};
   const messages = [];
 
   // Check if mobile device
@@ -175,13 +181,13 @@
     } catch (e) {}
   }
 
-  // Track Plausible goal (fires once per page load)
-  function trackPlausibleGoal() {
-    if (hasTrackedGoal || !config.plausibleGoal) return;
-    hasTrackedGoal = true;
+  // Track Plausible goal (each goal fires once per page load)
+  function trackGoal(goalName) {
+    if (!goalName || trackedGoals[goalName]) return;
+    trackedGoals[goalName] = true;
 
     if (typeof plausible === 'function') {
-      plausible(config.plausibleGoal);
+      plausible(goalName);
     }
   }
 
@@ -494,8 +500,8 @@
     isOpen = true;
     panel.classList.add('open');
 
-    // Track Plausible goal
-    trackPlausibleGoal();
+    // Track Plausible goal: panel opened
+    trackGoal(config.plausibleOpen);
 
     // Remove pulse when opened
     if (toggle) toggle.classList.remove('pulse');
@@ -614,10 +620,20 @@
     const input = document.getElementById(`${WIDGET_ID}-input`);
     const send = document.getElementById(`${WIDGET_ID}-send`);
 
-    toggle.addEventListener('click', togglePanel);
+    toggle.addEventListener('click', () => {
+      trackGoal(config.plausibleClick);
+      togglePanel();
+    });
     close.addEventListener('click', () => closePanel({ wasDismissed: true }));
 
+    input.addEventListener('focus', () => {
+      trackGoal(config.plausibleFocus);
+    });
+
     send.addEventListener('click', () => {
+      if (input.value.trim()) {
+        trackGoal(config.plausibleSend);
+      }
       sendMessage(input.value);
       input.value = '';
     });
@@ -625,6 +641,9 @@
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
+        if (input.value.trim()) {
+          trackGoal(config.plausibleSend);
+        }
         sendMessage(input.value);
         input.value = '';
       }
